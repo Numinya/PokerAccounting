@@ -1,5 +1,6 @@
 # About poker_accounting.cpp
 This program allows poker to be played without chips. Compile and run the program, enter names and starting information and begin the poker session.
+Designed and programmed by me in C++.
 
 # Usage
 Enter what is required by the prompts. As for move's the program accepts
