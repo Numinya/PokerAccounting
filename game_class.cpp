@@ -159,39 +159,63 @@ void game_class::process_all_in() {
 
 }
 
+void game_class::print_info() {
+    std::cout << "------------------------------" << std::endl;
+    std::cout << "current turn: " << current->name << std::endl;
+    std::cout << "balance: " << current->balance << std::endl;
+    std::cout << "bet to play in: " << highest_bet_guy->round_bet << std::endl;
+    std::cout << "total pot: " << pot << std::endl;
+    std::cout << "------------------------------" << std::endl;
+}
+
 void game_class::take_action() {
     std::string action;
-    std::cout << current->name << "'s move: ";
-    std::cin >> action;
+    bool done = false;
 
-    if (action == "fold") {
-        fold();
+    while (!done) {
+        std::cout << current->name << "'s move: ";
+        std::cin >> action;
+
+        if (action == "fold") {
+            fold();
+            done = true;
+        }
+
+        else if (action == "bet") {
+            process_bet();
+            done = true;
+        }
+
+        else if (action == "call") {
+            adjust_balance_bet(highest_bet_guy->round_bet - current->round_bet);
+            done = true;
+        }
+
+        else if (action == "raise") {
+            process_raise();
+            done = true;
+        }
+
+        else if (action == "all in") {             
+            process_all_in();
+            done = true;
+        } 
+
+        else if (action == "quit") {
+            exit(EXIT_SUCCESS);
+        }
+
+        else if (action == "info") {
+            print_info();
+        }
+
+        else {
+            // assumption value is check
+            // do nothing
+            done = true;
+        }
     }
-
-    else if (action == "bet") {
-        process_bet();
-    }
-
-    else if (action == "call") {
-        adjust_balance_bet(highest_bet_guy->round_bet - current->round_bet);
-    }
-
-    else if (action == "raise") {
-        process_raise();
-    }
-
-    else if (action == "all in") {             
-        process_all_in();
-    } 
-
-    else if (action == "quit") {
-        exit(EXIT_SUCCESS);
-    }
-
-    else {
-        // assumption value is check
-        // do nothing
-    }
+    
 }
 
 
@@ -241,6 +265,7 @@ void game_class::reset_game() {
     
 
     // reset the pots
+    pot = 0;
 
     // reset total bets, in 
     for (int i = 0; i < player_num; i++) {
@@ -248,4 +273,6 @@ void game_class::reset_game() {
         players[i].all_in = false;
         players[i].total_bet = 0;
     } 
+
+    all_in = false;
 }
